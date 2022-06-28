@@ -1,17 +1,15 @@
 'use strict';
 
-const Chance = require('chance');
-const chance = new Chance();
 const eventPool = require('./eventPool');
-const { pickup, delivered } = require('./vendor/vendorEvents');
-const driverEvent = require('./driver/driverEvents');
+require('./vendor/vendorEvents');
+require('./driver/driverEvents');
 
-// listens to all events in event pool
-eventPool.on('ORDER', pickup);
-eventPool.on('PICKUP', driverEvent);
-eventPool.on('DELIVERED', delivered);
+// logs all events in event pool
+eventPool.on('ORDER', (payload) => logger('ORDER', payload));
+eventPool.on('PICKUP', (payload) => logger('PICKUP', payload));
+eventPool.on('DELIVERED', (payload) => logger('DELIVERED', payload));
 
-setInterval(() => {
-  let storeName = chance.word();
-  eventPool.emit('ORDER', { storeName });
-}, 3000);
+function logger(event, payload) {
+  let time = new Date();
+  console.log('EVENT', { event, time, payload });
+}
