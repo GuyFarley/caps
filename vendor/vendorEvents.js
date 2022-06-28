@@ -19,6 +19,7 @@ let order = {
 
 setInterval(() => {
   eventPool.emit('PICKUP', order);
+
 }, 3000);
 
 module.exports = delivered;
