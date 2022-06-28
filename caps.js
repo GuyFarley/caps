@@ -3,16 +3,13 @@
 const Chance = require('chance');
 const chance = new Chance();
 const eventPool = require('./eventPool');
-const vendorEvent = require('./vendor/vendorEvents');
-// const driverEvent = require('./driver/driverEvents');
-
-// require event handlers
+const { pickup, delivered } = require('./vendor/vendorEvents');
+const driverEvent = require('./driver/driverEvents');
 
 // listens to all events in event pool
-eventPool.on('ORDER', vendorEvent);
-// eventPool.on('PICKUP', driverEvent);
-
-// logs timestamp and payload of every event
+eventPool.on('ORDER', pickup);
+eventPool.on('PICKUP', driverEvent);
+eventPool.on('DELIVERED', delivered);
 
 setInterval(() => {
   let storeName = chance.word();
