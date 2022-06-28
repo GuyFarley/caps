@@ -4,7 +4,6 @@ const eventPool = require('../eventPool');
 const Chance = require('chance');
 const chance = new Chance();
 
-eventPool.on('DELIVERED', delivered);
 
 function delivered(payload) {
   console.log(`VENDOR: Thank you for delivering order ${payload.orderId}`);
@@ -21,4 +20,6 @@ setInterval(() => {
   eventPool.emit('PICKUP', order);
 }, 3000);
 
-module.exports = delivered;
+eventPool.on('DELIVERED', delivered);
+
+module.exports = { order, delivered };
