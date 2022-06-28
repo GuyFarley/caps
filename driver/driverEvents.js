@@ -2,15 +2,11 @@
 
 const eventPool = require('../eventPool');
 
-module.exports = (payload) => {
-  let currentTime = new Date();
+eventPool.on('PICKUP', driverEvent);
+
+function driverEvent(payload) {
   console.log(`DRIVER: picked up order ${payload.orderId}`);
-  let globalEvent = {
-    event: 'in-transit',
-    time: currentTime,
-    payload: payload,
-  };
-  console.log('EVENT: ', globalEvent);
+  // could be two separate functions AND / OR use setInterval to simulate passage of time
   console.log(`DRIVER: delivered order ${payload.orderId}`);
   eventPool.emit('DELIVERED', payload);
-};
+}
