@@ -1,7 +1,7 @@
 'use strict';
 
 const { Server } = require('socket.io');
-const { io } = require('socket.io-client');
+// const { io } = require('socket.io-client');
 
 const PORT = process.env.PORT || 3002;
 
@@ -22,13 +22,23 @@ caps.on('connection', (socket) => {
     socket.join(room);
   });
 
+  // PICKUP
   socket.on('PICKUP', (payload) => {
     logEvent('PICKUP', payload);
-    socket.broadcast.emit('PICKUP', payload);
+    caps.emit('PICKUP', payload);
   });
 
+
+  // IN-TRANSIT
+  socket.on('IN-TRANSIT', (payload) => {
+    logEvent('IN-TRANSIT', payload);
+    caps.to(payload.store).emit('IN-TRANSIT, payload');
+  });
+
+  // DELIVERED
   socket.on('DELIVERED', (payload) => {
     logEvent('DELIVERED', payload);
+    caps.to(payload.store).emit('DELIVERED, payload');
   });
 
   // emit delivery info to vendor's room
