@@ -1,12 +1,13 @@
 'use strict';
 
-const eventPool = require('../eventPool');
+const { io } = require('socket.io-client');
+const socket = io('http://localhost:3002/caps');
 
-eventPool.on('PICKUP', driverEvent);
+socket.on('PICKUP', driverEvent);
 
 function driverEvent(payload) {
   console.log(`DRIVER: picked up order ${payload.orderId}`);
   // could be two separate functions AND / OR use setInterval to simulate passage of time
   console.log(`DRIVER: delivered order ${payload.orderId}`);
-  eventPool.emit('DELIVERED', payload);
+  socket.emit('DELIVERED', payload);
 }
