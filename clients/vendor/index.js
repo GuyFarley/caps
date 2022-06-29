@@ -5,8 +5,6 @@ const chance = new Chance();
 const { io } = require('socket.io-client');
 const socket = io('http://localhost:3002/caps');
 
-// listen for delivery
-
 setInterval(() => {
   let order = {
     store: chance.company(),
@@ -14,7 +12,7 @@ setInterval(() => {
     customer: chance.name(),
     address: chance.city(),
   };
-  console.log('Vendor: Order established', order.orderId);
+  console.log('VENDOR: Order established', order.orderId);
 
   const clientRoom = order.store;
   socket.emit('JOIN', clientRoom);

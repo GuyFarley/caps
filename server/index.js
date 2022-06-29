@@ -1,6 +1,7 @@
 'use strict';
 
 const { Server } = require('socket.io');
+const { io } = require('socket.io-client');
 
 const PORT = process.env.PORT || 3002;
 
@@ -21,10 +22,6 @@ caps.on('connection', (socket) => {
     socket.join(room);
   });
 
-  // manage the ORDER event
-  // creates the ORDER hub
-  // listens for and logs events
-  // relays payload to clients who are subscribed
   socket.on('PICKUP', (payload) => {
     logEvent('PICKUP', payload);
     socket.broadcast.emit('PICKUP', payload);
@@ -32,12 +29,11 @@ caps.on('connection', (socket) => {
 
   socket.on('DELIVERED', (payload) => {
     logEvent('DELIVERED', payload);
-    // emit delivery info to vendor's room
   });
 
+  // emit delivery info to vendor's room
+
 });
-
-
 
 function logEvent(event, payload) {
   let time = new Date();
