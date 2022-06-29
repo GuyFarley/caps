@@ -11,8 +11,6 @@ const server = new Server(PORT);
 // same url, just at an endpoint:  http://localhost:3002/caps
 const caps = server.of('/caps');
 
-// connect socket to event server
-
 // connect socket to caps namespace
 caps.on('connection', (socket) => {
   console.log('Socket connected to CAPS namespace', socket.id);
@@ -29,8 +27,14 @@ caps.on('connection', (socket) => {
   // relays payload to clients who are subscribed
   socket.on('PICKUP', (payload) => {
     logEvent('PICKUP', payload);
-    caps.emit('PICKUP', payload);
+    socket.broadcast.emit('PICKUP', payload);
   });
+
+  socket.on('DELIVERED', (payload) => {
+    logEvent('DELIVERED', payload);
+    // emit delivery info to vendor's room
+  });
+
 });
 
 
