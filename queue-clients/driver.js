@@ -4,7 +4,7 @@ const MessageClient = require('./lib/messageClient');
 const driver = new MessageClient('driver messages');
 
 driver.subscribe('PICKUP', (payload) => {
-  console.log(`Received new order from ${payload.order.store}: ${payload.order.orderId}`);
+  console.log(`DRIVER: Received new order from ${payload.order.store}: ${payload.order.orderId}`);
 
   setTimeout(() => {
     // console.log(`DRIVER: picked up order ${payload.order.orderId}`);
@@ -16,5 +16,5 @@ driver.subscribe('PICKUP', (payload) => {
     driver.publish('DELIVERED', payload);
   }, 6000);
 
-  driver.publish('RECEIVED', payload);
+  // driver.publish('RECEIVED', payload);
 });
