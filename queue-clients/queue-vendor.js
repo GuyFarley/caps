@@ -3,7 +3,7 @@
 const MessageClient = require('./lib/messageClient');
 const Chance = require('chance');
 const chance = new Chance();
-const vendor = new MessageClient();
+const vendor = new MessageClient('vendor messages');
 
 setInterval(() => {
   let order = {
@@ -15,6 +15,10 @@ setInterval(() => {
 
   console.log('New order sent from ', order.store);
   vendor.publish('PICKUP', { messageId: chance.guid(), order });
+
+  vendor.subscribe('RECEIVED', (payload) => {
+    console.log(`Confirmed ${payload.orderId} received`);
+  });
 }, 3000);
 
 setInterval(() => {
@@ -29,6 +33,3 @@ setInterval(() => {
   vendor.publish('PICKUP', { messageId: chance.guid(), order });
 }, 2000);
 
-vendor.subscribe('RECEIVED', (payload) => {
-  console.log(`Confirmed ${payload.orderId} received`);
-});
