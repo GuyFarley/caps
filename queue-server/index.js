@@ -22,7 +22,7 @@ caps.on('connection', (socket) => {
   // how to join a room
   socket.on('JOIN', (queueId) => {
     // console.log(queueId);
-    // console.log(`You've joined the ${queueId.value} room!`);
+    // console.log(`Joined the ${queueId} room`);
     socket.join(queueId);
     socket.emit('JOIN', queueId);
   });
