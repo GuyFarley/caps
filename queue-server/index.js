@@ -21,7 +21,8 @@ caps.on('connection', (socket) => {
 
   // how to join a room
   socket.on('JOIN', (queueId) => {
-    // console.log(`You've joined the ${room} room!`);
+    // console.log(queueId);
+    // console.log(`Joined the ${queueId} room`);
     socket.join(queueId);
     socket.emit('JOIN', queueId);
   });
@@ -44,8 +45,8 @@ caps.on('connection', (socket) => {
       let queueKey = messageQueue.store(payload.queueId, new Queue());
       currentQueue = messageQueue.read(queueKey);
     }
-    currentQueue.store(payload.messageId, payload);
-    caps.emit('IN-TRANSIT', payload);
+    let message = currentQueue.store(payload.messageId);
+    caps.emit('IN-TRANSIT', message);
   });
 
   // DELIVERED
@@ -55,8 +56,8 @@ caps.on('connection', (socket) => {
       let queueKey = messageQueue.store(payload.queueId, new Queue());
       currentQueue = messageQueue.read(queueKey);
     }
-    currentQueue.store(payload.messageId, payload);
-    caps.emit('DELIVERED', payload);
+    let message = currentQueue.store(payload.messageId);
+    caps.emit('DELIVERED', message);
   });
 
   // RECEIVED
@@ -65,8 +66,10 @@ caps.on('connection', (socket) => {
     if (!currentQueue) {
       throw new Error('no queue created for this message');
     }
-    let message = currentQueue.remove(payload.messageId);
-    caps.to(payload.queueId).emit('RECEIVED', message);
+    Object.keys(currentQueue.data).forEach(queueItem => {
+      console.log('This happens', queueItem);
+      let message = currentQueue.remove(payload.messageId);
+      caps.to(payload.queueId).emit('RECEIVED', message);
+    });
   });
-
 });

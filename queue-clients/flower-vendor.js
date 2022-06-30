@@ -13,10 +13,14 @@ setInterval(() => {
     address: `${chance.city()}, ${chance.state()}`,
   };
 
-  console.log('New order sent from', order.store);
+  console.log('VENDOR: New order sent from', order.store);
   vendor.publish('PICKUP', { messageId: chance.guid(), order });
 }, 3000);
 
+vendor.subscribe('DELIVERED', (payload) => {
+  console.log(`VENDOR: Thank you for delivering ${payload}`);
+});
+
 vendor.subscribe('RECEIVED', (payload) => {
-  console.log(`Confirmed ${payload.orderId} received`);
+  console.log(`Confirmed ${payload} received`);
 });
